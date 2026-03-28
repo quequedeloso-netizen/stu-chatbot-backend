@@ -48,8 +48,10 @@ async def chat_endpoint(request: ChatRequest):
         )  
         
     except Exception as e:
-        print(f"Server error: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        import traceback
+        print(f"Server error: {type(e).__name__}: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 import os
 

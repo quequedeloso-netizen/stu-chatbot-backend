@@ -134,10 +134,13 @@ async def process_message(message: str, history: list, language: str) -> dict:
             
         try:
             parsed = json.loads(answer_str)
-            return {
-                "text": parsed.get("text", answer_str),
-                "translation": parsed.get("translation", "")
-            }
+            if isinstance(parsed, dict):
+                return {
+                    "text": parsed.get("text", answer_str),
+                    "translation": parsed.get("translation", "")
+                }
+            else:
+                return {"text": str(parsed), "translation": ""}
         except json.JSONDecodeError:
             # fallback if it didn't output json
             return {
