@@ -13,6 +13,10 @@ FAQ_DATABASE = {
         "text": "To report a dorm repair or any campus maintenance issue, please log in to the <b>ePortal</b> (https://info.stu.edu.tw/ePortal/login.asp), go to 'General Affairs Management' -> 'Online Repair System', and submit a repair request.",
         "keywords": ["repair", "fix", "dorm repair", "broken", "maintenance", "reconstruction"]
     },
+    "grades": {
+        "text": "You can check your grades and academic records by logging into the <b>STU Academic Services Portal</b> here: <a href='https://infosys.stu.edu.tw/AcademicServices/Grade' target='_blank'>Check My Grades</a>.",
+        "keywords": ["grades", "grade", "score", "scores", "results", "academic results", "how are my grades"]
+    },
     "contact": {
         "text": "You can contact STU at +886-7-6158000. For more specific department contacts, please visit: https://www.stu.edu.tw/category/about-stu/contact-us/",
         "keywords": ["contact", "phone", "number", "email", "call", "telephone", "office"]
