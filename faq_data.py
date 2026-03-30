@@ -7,7 +7,11 @@ FAQ_DATABASE = {
     },
     "location": {
         "text": "Shu-Te University is located at No. 18, Hunghua Rd., Yanchao Dist., Kaohsiung City 82445, Taiwan (R.O.C.).",
-        "keywords": ["location", "where", "address", "address of school", "campus location", "how to get there"]
+        "keywords": ["location", "address", "address of school", "campus location", "how to get there"]
+    },
+    "repairs": {
+        "text": "To report a dorm repair or any campus maintenance issue, please log in to the <b>ePortal</b> (https://info.stu.edu.tw/ePortal/login.asp), go to 'General Affairs Management' -> 'Online Repair System', and submit a repair request.",
+        "keywords": ["repair", "fix", "dorm repair", "broken", "maintenance", "reconstruction"]
     },
     "contact": {
         "text": "You can contact STU at +886-7-6158000. For more specific department contacts, please visit: https://www.stu.edu.tw/category/about-stu/contact-us/",
@@ -31,6 +35,8 @@ FAQ_DATABASE = {
     }
 }
 
+import re
+
 def get_faq_answer(message: str, knowledge_map: dict = None) -> dict:
     """
     Checks if the user message matches any FAQ keywords or scraped links.
@@ -41,7 +47,9 @@ def get_faq_answer(message: str, knowledge_map: dict = None) -> dict:
     # Check manual FAQ first
     for key, data in FAQ_DATABASE.items():
         for keyword in data["keywords"]:
-            if keyword in message:
+            # Pattern matches the keyword as a whole word (using word boundaries \b)
+            pattern = re.compile(rf'\b{re.escape(keyword.lower())}\b')
+            if pattern.search(message):
                 return {
                     "text": data["text"],
                     "translation": "" 
@@ -49,9 +57,12 @@ def get_faq_answer(message: str, knowledge_map: dict = None) -> dict:
     
     # Check scraped link map (KNOWLEDGE_MAP)
     if knowledge_map:
-        for text, href in knowledge_map.items():
-            # If the user mentions a specific section of the site
-            if text in message and len(text) > 4: # Avoid very short generic matches
+        # Sort keys by length descending to match the most specific link first
+        sorted_keys = sorted(knowledge_map.keys(), key=len, reverse=True)
+        for text in sorted_keys:
+            href = knowledge_map[text]
+            # If the user mentions a specific section of the site (at least 5 chars)
+            if text in message and len(text) > 4: 
                 return {
                     "text": f"I found a relevant link for you: <a href='{href}' target='_blank'>{text.capitalize()}</a>",
                     "translation": ""
